@@ -16,6 +16,10 @@ public class Beer implements Serializable{
     @ManyToMany(mappedBy = "beers", cascade = CascadeType.ALL)
     private List<Bar> bars;
 
+    public Beer(String name) {
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

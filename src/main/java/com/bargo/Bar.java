@@ -1,11 +1,10 @@
 package com.bargo;
 
-/**
- * Created by marco on 20/09/2016.
- */
+import com.fasterxml.jackson.annotation.JsonView;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -27,10 +26,23 @@ public class Bar implements Serializable{
     @Column(nullable = false)
     private String place_id;
 
+    @Column(nullable = false)
+    private Date created_at;
+
+    @Column(nullable = false)
+    private Date updated_at;
+
     @ManyToMany(targetEntity = Beer.class, cascade = {CascadeType.ALL})
     @JoinTable(name = "bars_has_beers", joinColumns = { @JoinColumn(name = "bar_id") },
             inverseJoinColumns = { @JoinColumn(name = "beer_id") })
     private List<Beer> beers;
+
+    public Bar(String name, String lat, String lon, String place_id) {
+        this.name = name;
+        this.lat = lat;
+        this.lon = lon;
+        this.place_id = place_id;
+    }
 
     public Long getId() {
         return id;
@@ -40,6 +52,7 @@ public class Bar implements Serializable{
         this.id = id;
     }
 
+    @JsonView(View.Summary.class)
     public String getName() {
         return name;
     }
@@ -48,6 +61,7 @@ public class Bar implements Serializable{
         this.name = name;
     }
 
+    @JsonView(View.Summary.class)
     public String getLat() {
         return lat;
     }
@@ -56,6 +70,7 @@ public class Bar implements Serializable{
         this.lat = lat;
     }
 
+    @JsonView(View.Summary.class)
     public String getLon() {
         return lon;
     }
@@ -64,6 +79,7 @@ public class Bar implements Serializable{
         this.lon = lon;
     }
 
+    @JsonView(View.Summary.class)
     public String getPlace_id() {
         return place_id;
     }
@@ -78,5 +94,16 @@ public class Bar implements Serializable{
 
     public void setBeers(List<Beer> beers) {
         this.beers = beers;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        created_at = new Date();
+        updated_at = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updated_at = new Date();
     }
 }
