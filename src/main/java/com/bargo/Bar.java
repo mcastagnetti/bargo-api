@@ -37,6 +37,10 @@ public class Bar implements Serializable{
             inverseJoinColumns = { @JoinColumn(name = "beer_id") })
     private List<Beer> beers;
 
+    public Bar() {
+        super();
+    }
+
     public Bar(String name, String lat, String lon, String place_id) {
         this.name = name;
         this.lat = lat;
@@ -44,6 +48,7 @@ public class Bar implements Serializable{
         this.place_id = place_id;
     }
 
+    @JsonView(View.Summary.class)
     public Long getId() {
         return id;
     }
