@@ -1,5 +1,6 @@
-package com.bargo;
+package com.bargo.bar;
 
+import com.bargo.bar.Bar;
 import org.springframework.data.repository.CrudRepository;
 
 /**

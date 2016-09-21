@@ -1,6 +1,8 @@
-package com.bargo;
+package com.bargo.bar;
 
-import com.fasterxml.jackson.annotation.JsonView;
+import com.bargo.beer.Beer;
+import com.bargo.View;
+import com.fasterxml.jackson.annotation.*;
 
 import java.io.Serializable;
 import javax.persistence.*;
@@ -8,6 +10,9 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Bar implements Serializable{
 
     @Id
@@ -93,6 +98,7 @@ public class Bar implements Serializable{
         this.place_id = place_id;
     }
 
+    @JsonView(View.Summary.class)
     public List<Beer> getBeers() {
         return beers;
     }
