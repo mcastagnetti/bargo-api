@@ -38,7 +38,7 @@ public class BarController {
         return new ResponseEntity(bar, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/bars/{id}/beers", method={RequestMethod.GET, RequestMethod.POST})
+    @PostMapping(value = "/bars/{id}/beers")
     public ResponseEntity addBeerToBar(@PathVariable("id") Long id, @RequestBody List<Beer> beers) {
         Bar bar = barDAO.findOne(id);
         if (bar == null) {
@@ -59,6 +59,19 @@ public class BarController {
 
             return new ResponseEntity(bar, HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/bars/{id}/beers")
+    public ResponseEntity getBeers(@PathVariable("id") Long id) {
+
+        Bar bar = barDAO.findOne(id);
+        if (bar == null) {
+            return new ResponseEntity("No Beers found for bar with ID " + id, HttpStatus.NOT_FOUND);
+        }
+
+        List<Beer> beers = bar.getBeers();
+
+        return new ResponseEntity(beers, HttpStatus.OK);
     }
 
     @PostMapping(value = "/bars", produces = "application/json")

@@ -1,6 +1,7 @@
 package com.bargo.beer;
 
 import com.bargo.bar.Bar;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -48,6 +49,7 @@ public class Beer implements Serializable{
         this.name = name;
     }
 
+    @JsonBackReference
     public List<Bar> getBars() {
         return bars;
     }
