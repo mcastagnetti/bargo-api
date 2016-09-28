@@ -2,8 +2,6 @@ package com.bargo.bar;
 
 import com.bargo.beer.Beer;
 import com.bargo.beer.BeerRepository;
-import com.bargo.View;
-import com.fasterxml.jackson.annotation.JsonView;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +19,22 @@ public class BarController {
     @Autowired
     private BeerRepository beerDAO;
 
-    @JsonView(View.Summary.class)
     @GetMapping("/bars")
-    public Iterable<Bar> getBars() {
-        return barDAO.findAll();
+    public ResponseEntity getBars() {
+
+        List<Bar> bars = (List<Bar>) barDAO.findAll();
+
+        if (bars == null) {
+            return new ResponseEntity("No Bar found", HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity(bars, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/bars", produces = "application/json")
+    public ResponseEntity createBar(@RequestBody Bar bar) {
+        barDAO.save(bar);
+        return new ResponseEntity(bar, HttpStatus.OK);
     }
 
     @GetMapping("/bars/{id}")
@@ -34,6 +44,24 @@ public class BarController {
         if (bar == null) {
             return new ResponseEntity("No Bar found for ID " + id, HttpStatus.NOT_FOUND);
         }
+
+        return new ResponseEntity(bar, HttpStatus.OK);
+    }
+
+    @PutMapping("/bars/{id}")
+    public ResponseEntity updateBar(@PathVariable Long id, @RequestBody Bar updated) {
+
+        Bar bar = barDAO.findOne(id);
+        if (bar == null) {
+            return new ResponseEntity("No Bar found for ID " + id, HttpStatus.NOT_FOUND);
+        }
+
+        bar.setLat(updated.getLat());
+        bar.setLon(updated.getLon());
+        bar.setName(updated.getName());
+        bar.setPlace_id(updated.getPlace_id());
+
+        barDAO.save(bar);
 
         return new ResponseEntity(bar, HttpStatus.OK);
     }
@@ -72,11 +100,5 @@ public class BarController {
         List<Beer> beers = bar.getBeers();
 
         return new ResponseEntity(beers, HttpStatus.OK);
-    }
-
-    @PostMapping(value = "/bars", produces = "application/json")
-    public ResponseEntity createBar(@RequestBody Bar bar) {
-        barDAO.save(bar);
-        return new ResponseEntity(bar, HttpStatus.OK);
     }
 }
