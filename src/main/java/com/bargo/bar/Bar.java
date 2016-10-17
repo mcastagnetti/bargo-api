@@ -37,7 +37,7 @@ public class Bar implements Serializable{
     @Column(nullable = false)
     private Date updated_at;
 
-    @ManyToMany(targetEntity = Beer.class, cascade = {CascadeType.ALL})
+    @ManyToMany(targetEntity = Beer.class, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(name = "bars_has_beers", joinColumns = { @JoinColumn(name = "bar_id") },
             inverseJoinColumns = { @JoinColumn(name = "beer_id") })
     private List<Beer> beers;

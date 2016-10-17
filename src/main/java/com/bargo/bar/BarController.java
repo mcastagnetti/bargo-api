@@ -1,7 +1,5 @@
 package com.bargo.bar;
 
-import com.bargo.beer.Beer;
-import com.bargo.beer.BeerRepository;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +13,6 @@ public class BarController {
 
     @Autowired
     private BarRepository barDAO;
-
-    @Autowired
-    private BeerRepository beerDAO;
 
     @GetMapping("/bars")
     public ResponseEntity getBars() {
@@ -66,39 +61,16 @@ public class BarController {
         return new ResponseEntity(bar, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/bars/{id}/beers")
-    public ResponseEntity addBeerToBar(@PathVariable("id") Long id, @RequestBody List<Beer> beers) {
+    @DeleteMapping("/bars/{id}")
+    public ResponseEntity deleteBar(@PathVariable Long id) {
+
         Bar bar = barDAO.findOne(id);
         if (bar == null) {
             return new ResponseEntity("No Bar found for ID " + id, HttpStatus.NOT_FOUND);
-        } else {
-            List arrayBeers = new ArrayList<Beer>();
-            for (Beer beer : beers) {
-
-                if(beer.getId() != null) {
-                    beer = beerDAO.findOne(beer.getId());
-                }
-
-                arrayBeers.add(beer);
-            }
-
-            bar.setBeers(arrayBeers);
-            barDAO.save(bar);
-
-            return new ResponseEntity(bar, HttpStatus.OK);
-        }
-    }
-
-    @GetMapping("/bars/{id}/beers")
-    public ResponseEntity getBeers(@PathVariable("id") Long id) {
-
-        Bar bar = barDAO.findOne(id);
-        if (bar == null) {
-            return new ResponseEntity("No Beers found for bar with ID " + id, HttpStatus.NOT_FOUND);
         }
 
-        List<Beer> beers = bar.getBeers();
+        barDAO.delete(bar);
 
-        return new ResponseEntity(beers, HttpStatus.OK);
+        return new ResponseEntity("Bar " + id + " as been deleted", HttpStatus.OK);
     }
 }
