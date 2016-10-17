@@ -101,4 +101,18 @@ public class BeerController {
 
         return new ResponseEntity("Beer " + beer_id + " as been deleted", HttpStatus.OK);
     }
+
+    @GetMapping("beers/{id}/bars")
+    public ResponseEntity getBarFromBeer(@PathVariable Long id) {
+
+        Beer beer   = beerDAO.findOne(id);
+
+        if (beer == null) {
+            return new ResponseEntity("No Beer found for ID " + id, HttpStatus.NOT_FOUND);
+        }
+
+        List<Bar> bars = beer.getBars();
+
+        return new ResponseEntity(bars, HttpStatus.OK);
+    }
 }
