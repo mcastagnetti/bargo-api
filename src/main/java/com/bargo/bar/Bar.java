@@ -13,20 +13,21 @@ import java.util.List;
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
+@Table(name = "bar")
 public class Bar implements Serializable{
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "name")
     private String name;
 
     @Column(nullable = false)
-    private String lat;
+    private Float lat;
 
     @Column(nullable = false)
-    private String lon;
+    private Float lon;
 
     @Column(nullable = false)
     private String place_id;
@@ -46,7 +47,7 @@ public class Bar implements Serializable{
         super();
     }
 
-    public Bar(String name, String lat, String lon, String place_id) {
+    public Bar(String name, Float lat, Float lon, String place_id) {
         this.name = name;
         this.lat = lat;
         this.lon = lon;
@@ -72,20 +73,20 @@ public class Bar implements Serializable{
     }
 
     @JsonView(View.Summary.class)
-    public String getLat() {
+    public Float getLat() {
         return lat;
     }
 
-    public void setLat(String lat) {
+    public void setLat(Float lat) {
         this.lat = lat;
     }
 
     @JsonView(View.Summary.class)
-    public String getLon() {
+    public Float getLon() {
         return lon;
     }
 
-    public void setLon(String lon) {
+    public void setLon(Float lon) {
         this.lon = lon;
     }
 

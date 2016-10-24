@@ -25,10 +25,6 @@ public class BeerController {
     @Autowired
     private BeerRepository beerDAO;
 
-    @PersistenceContext
-    private EntityManager manager;
-
-
     @PostMapping(value = "/bars/{id}/beers")
     public ResponseEntity addBeerToBar(@PathVariable("id") Long id, @RequestBody List<Beer> beers) {
         Bar bar = barDAO.findOne(id);
