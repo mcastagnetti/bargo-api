@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 
+
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 public class BarController {
 
